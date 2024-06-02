@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Форма обратной связи</title>
+<link rel="stylesheet" href="1page.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  </head>
+
+<body>
+<div class="container">
+  <h2>Обратная связь</h2>
+  <form id="contactForm">
+    <input type="text" id="fullName" placeholder="ФИО" required>
+    <input type="text" id="address" placeholder="Адрес" required>
+    <input type="tel" id="phone" placeholder="Телефон" required>
+    <input type="email" id="email" placeholder="E-mail" required>
+    <button type="submit">Отправить</button>
+  </form>
+</div>
+
+<div class="tb">
+  
+  <table id="contactsTable">
+    <thead>
+      <tr>
+        <th>ФИО</th>
+        <th>Адрес</th>
+        <th>Телефон</th>
+        <th>E-mail</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Здесь будут отображаться данные из базы данных -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+$(document).ready(function() {
+  // Обработчик отправки формы
+  $("#contactForm").submit(function(event) {
+    event.preventDefault(); // Предотвращаем перезагрузку страницы после отправки формы
+    
+    // Получаем значения полей формы
+    var fullName = $("#fullName").val();
+    var address = $("#address").val();
+    var phone = $("#phone").val();
+    var email = $("#email").val();
+    
+    // Отправляем данные на сервер с помощью AJAX-запроса
+    $.ajax({
+      url: "save_contact.php", // Путь к файлу PHP для сохранения данных
+      method: "POST",
+      data: {
+        fullName: fullName,
+        address: address,
+        phone: phone,
+        email: email
+      },
+      success: function(response) {
+        // Если данные успешно сохранены, очищаем поля формы и обновляем таблицу
+        $("#fullName").val("");
+        $("#address").val("");
+        $("#phone").val("");
+        $("#email").val("");
+        refreshTable(); // Обновляем таблицу
+      },
+      error: function(xhr, status, error) {
+        console.error("Ошибка при сохранении данных: " + error);
+      }
+    });
+  });
+  
+  // Функция для обновления таблицы
+  function refreshTable() {
+    $.ajax({
+      url: "get_contacts.php", // Путь к файлу PHP для получения данных
+      method: "GET",
+      success: function(response) {
+        $("#contactsTable tbody").html(response); // Заменяем содержимое tbody на полученные данные
+      },
+      error: function(xhr, status, error) {
+        console.error("Ошибка при получении данных: " + error);
+      }
+    });
+  }
+  
+  // При загрузке страницы сразу обновляем таблицу
+  refreshTable();
+});
+</script>
+</body>
+</html>
