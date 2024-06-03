@@ -1,1 +1,1 @@
-https://sonikmav.github.io/TestTaskDemis/
+http://koltso2g.beget.tech
