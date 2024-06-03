@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Все новости</title>
+<link rel="stylesheet" href="index.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- Блок с новостями -->
+    <div>
+    <table id="newsTable">
+        <tbody>
+          <!-- Здесь будут отображаться данные из базы данных -->
+              <!-- Ссылка на страницу 1 -->
+
+        </tbody>
+        
+      </table>
+
+    <div class="links">
+        <a href="1page.html" class="link">Обратная связь</a>
+
+      <!-- Ссылка на страницу 3 -->
+      <br><a href="2page.html" class="link">Все новости</a>
+    </div>
+</div>
+ 
+
+<script>
+$(document).ready(function() {
+  
+  // Функция для обновления таблицы
+  function refreshTable() {
+    $.ajax({
+      url: "last_news.php", // Путь к файлу PHP для получения данных
+      method: "GET",
+      success: function(response) {
+        $("#newsTable tbody").html(response); // Заменяем содержимое tbody на полученные данные
+      },
+      error: function(xhr, status, error) {
+        console.error("Ошибка при получении данных: " + error);
+      }
+    });
+  }
+  
+  // При загрузке страницы сразу обновляем таблицу
+  refreshTable();
+});
+</script>  
+
+     
+
+</body>
+
+
+</html>
